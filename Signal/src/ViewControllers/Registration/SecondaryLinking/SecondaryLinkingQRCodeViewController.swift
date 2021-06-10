@@ -118,6 +118,7 @@ public class SecondaryLinkingQRCodeViewController: OnboardingBaseViewController 
         provisioningController.getProvisioningURL().done { url in
             self.qrCodeURL = url
             try self.qrCodeView.setQR(url: url)
+            print("TESTSIG url", url)
         }.catch { error in
             let title = NSLocalizedString("SECONDARY_DEVICE_ERROR_FETCHING_LINKING_CODE", comment: "alert title")
             let alert = ActionSheetController(title: title, message: error.localizedDescription)

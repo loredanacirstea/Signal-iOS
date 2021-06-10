@@ -107,6 +107,7 @@ public extension UIDevice {
 
     var isIPad: Bool {
         return userInterfaceIdiom == .pad
+        // return true
     }
 
     var isFullScreen: Bool {

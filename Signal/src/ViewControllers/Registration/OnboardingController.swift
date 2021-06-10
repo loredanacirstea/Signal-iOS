@@ -665,6 +665,7 @@ public class OnboardingController: NSObject {
     // MARK: - Registration
 
     public func requestVerification(fromViewController: UIViewController, isSMS: Bool) {
+        print("TESTSIG Onboarding Controller requestVerification")
         AssertIsOnMainThread()
 
         guard let phoneNumber = phoneNumber else {

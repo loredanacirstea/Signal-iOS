@@ -57,12 +57,14 @@ public class SignalServiceRestClient: NSObject, SignalServiceClient {
     // MARK: - Public
 
     public func requestPreauthChallenge(recipientId: String, pushToken: String) -> Promise<Void> {
+        print("TESTSIG SignalServiceClient requestPreauthChallenge", recipientId, pushToken)
         let request = OWSRequestFactory.requestPreauthChallengeRequest(recipientId: recipientId,
                                                                        pushToken: pushToken)
         return networkManager.makePromise(request: request).asVoid()
     }
 
     public func requestVerificationCode(recipientId: String, preauthChallenge: String?, captchaToken: String?, transport: TSVerificationTransport) -> Promise<Void> {
+        print("TESTSIG SignalServiceClient requestVerificationCode", recipientId, preauthChallenge, captchaToken, transport)
         let request = OWSRequestFactory.requestVerificationCodeRequest(withPhoneNumber: recipientId,
                                                                        preauthChallenge: preauthChallenge,
                                                                        captchaToken: captchaToken,

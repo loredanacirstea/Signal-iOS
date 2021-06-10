@@ -38,6 +38,7 @@ NS_ASSUME_NONNULL_BEGIN
                          success:(void (^)(void))successCallback
                          failure:(void (^)(NSError *))failureCallback
 {
+    NSLog(@"%@", deviceId);
     TSRequest *request =
         [OWSRequestFactory deviceProvisioningRequestWithMessageBody:messageBody ephemeralDeviceId:deviceId];
     [self.networkManager makeRequest:request

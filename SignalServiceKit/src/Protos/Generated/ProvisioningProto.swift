@@ -21,12 +21,14 @@ public class ProvisioningProtoProvisioningUuid: NSObject, Codable {
 
     @objc
     public class func builder(uuid: String) -> ProvisioningProtoProvisioningUuidBuilder {
+        print("TESTSIG ProvisioningProto builder uuid", uuid);
         return ProvisioningProtoProvisioningUuidBuilder(uuid: uuid)
     }
 
     // asBuilder() constructs a builder that reflects the proto's contents.
     @objc
     public func asBuilder() -> ProvisioningProtoProvisioningUuidBuilder {
+        print("TESTSIG ProvisioningProto asBuilder uuid", uuid);
         let builder = ProvisioningProtoProvisioningUuidBuilder(uuid: uuid)
         if let _value = unknownFields {
             builder.setUnknownFields(_value)
@@ -45,6 +47,7 @@ public class ProvisioningProtoProvisioningUuid: NSObject, Codable {
         @objc
         fileprivate init(uuid: String) {
             super.init()
+            print("TESTSIG ProvisioningProtoProvisioningUuidBuilder uuid", uuid);
 
             setUuid(uuid)
         }

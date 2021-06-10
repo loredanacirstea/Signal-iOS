@@ -57,6 +57,7 @@ public enum PushRegistrationError: Error {
 
     public func requestPushTokens() -> Promise<(pushToken: String, voipToken: String)> {
         Logger.info("")
+        print("TESTSIG requestPushTokens")
 
         return firstly { () -> Promise<Void> in
             return self.registerUserNotificationSettings()
@@ -65,11 +66,16 @@ public enum PushRegistrationError: Error {
                 throw PushRegistrationError.pushNotSupported(description: "Push not supported on simulators")
             }
 
+            print("TESTSIG requestPushTokens registerForVanillaPushToken")
+
             return self.registerForVanillaPushToken().then { vanillaPushToken -> Promise<(pushToken: String, voipToken: String)> in
                 self.registerForVoipPushToken().map { voipPushToken in
                     (pushToken: vanillaPushToken, voipToken: voipPushToken)
                 }
             }
+            // return self.registerForVanillaPushToken().then { vanillaPushToken -> (pushToken: String, voipToken: String) in
+            //     return (pushToken: vanillaPushToken, voipToken: "voipPushToken")
+            // }
         }
     }
 
@@ -86,7 +92,7 @@ public enum PushRegistrationError: Error {
         vanillaTokenResolver.fulfill(tokenData)
     }
 
-    // Vanilla push token is obtained from the system via AppDelegate    
+    // Vanilla push token is obtained from the system via AppDelegate
     @objc
     public func didFailToReceiveVanillaPushToken(error: Error) {
         guard let vanillaTokenResolver = self.vanillaTokenResolver else {
@@ -173,6 +179,7 @@ public enum PushRegistrationError: Error {
     }
 
     private func registerForVanillaPushToken() -> Promise<String> {
+        print("TESTSIG registerForVanillaPushToken(2)")
         AssertIsOnMainThread()
         Logger.info("")
 
@@ -188,7 +195,11 @@ public enum PushRegistrationError: Error {
         self.vanillaTokenPromise = promise
         self.vanillaTokenResolver = resolver
 
+        print("TESTSIG registerForRemoteNotifications pre")
+
         UIApplication.shared.registerForRemoteNotifications()
+
+        print("TESTSIG registerForRemoteNotifications post")
 
         return firstly {
             promise.timeout(seconds: 10, description: "Register for vanilla push token") {
@@ -212,10 +223,13 @@ public enum PushRegistrationError: Error {
                 throw error
             }
         }.map { (pushTokenData: Data) -> String in
+            print("TESTSIG registerForVanillaPushToken pushTokenData", pushTokenData)
             if self.isSusceptibleToFailedPushRegistration {
                 // Sentinal in case this bug is fixed.
                 owsFailDebug("Device was unexpectedly able to complete push registration even though it was susceptible to failure.")
             }
+
+            print("TESTSIG registerForVanillaPushToken pushTokenData", pushTokenData.hexEncodedString)
 
             Logger.info("successfully registered for vanilla push notifications")
             return pushTokenData.hexEncodedString
@@ -225,6 +239,7 @@ public enum PushRegistrationError: Error {
     }
 
     private func registerForVoipPushToken() -> Promise<String> {
+        print("TESTSIG PushRegistrationManager registerForVoipPushToken")
         AssertIsOnMainThread()
         Logger.info("")
 
@@ -265,8 +280,22 @@ public enum PushRegistrationError: Error {
             resolver.fulfill(voipTokenData)
         }
 
+        // TESTSIG
+        print("TESTSIG PushRegistrationManager registerForVoipPushToken --", voipRegistry)
+        guard let dataValue = Data.data(fromHex: "4444") else {
+            return promise.map { _ in
+                // coerce expected type of returned promise - we don't really care about the value,
+                // since this promise has been rejected. In practice this shouldn't happen
+                String()
+            }
+        }
+//        guard let dataValue = Data(base64Encoded: "fakeVoipData") else { return "smth" }
+        resolver.fulfill(dataValue)
+        // END TESTSIG
+
         return promise.map { (voipTokenData: Data) -> String in
             Logger.info("successfully registered for voip push notifications")
+            print("TESTSIG PushRegistrationManager registerForVoipPushToken voipTokenData", voipTokenData.hexEncodedString)
             return voipTokenData.hexEncodedString
         }.ensure {
             self.voipTokenPromise = nil

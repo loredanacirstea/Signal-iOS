@@ -42,6 +42,7 @@ public class SignalServiceAddress: NSObject, NSCopying, NSSecureCoding, Codable 
             observeMappingChanges()
             return cachedUuid
         }
+        print("TESTSIG SignalServiceAddress backingUuid", uuid);
 
         return uuid
     }
@@ -96,6 +97,7 @@ public class SignalServiceAddress: NSObject, NSCopying, NSSecureCoding, Codable 
 
     @objc
     public init(uuid: UUID?, phoneNumber: String?, trustLevel: SignalRecipientTrustLevel) {
+        print("TESTSIG SignalServiceAddress init uuid", uuid);
         if phoneNumber == nil, let uuid = uuid,
             let cachedPhoneNumber = SignalServiceAddress.cache.phoneNumber(forUuid: uuid) {
             backingPhoneNumber = AtomicOptional(cachedPhoneNumber)

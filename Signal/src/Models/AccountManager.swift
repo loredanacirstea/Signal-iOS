@@ -7,7 +7,7 @@ import PromiseKit
 import SignalServiceKit
 
 /**
- * Signal is actually two services - textSecure for messages and red phone (for calls). 
+ * Signal is actually two services - textSecure for messages and red phone (for calls).
  * AccountManager delegates to both.
  */
 @objc
@@ -82,12 +82,15 @@ public class AccountManager: NSObject {
     }
 
     func requestAccountVerification(recipientId: String, captchaToken: String?, isSMS: Bool) -> Promise<Void> {
+        print("TESTSIG requestAccountVerification", recipientId, isSMS);
         let transport: TSVerificationTransport = isSMS ? .SMS : .voice
 
         return firstly { () -> Promise<String?> in
             guard !self.tsAccountManager.isRegistered else {
                 throw OWSAssertionError("requesting account verification when already registered")
             }
+
+            print("TESTSIG phoneNumberAwaitingVerification recipientId", recipientId);
 
             self.tsAccountManager.phoneNumberAwaitingVerification = recipientId
 
@@ -101,11 +104,14 @@ public class AccountManager: NSObject {
     }
 
     func getPreauthChallenge(recipientId: String) -> Promise<String?> {
+        print("TESTSIG getPreauthChallenge");
         return firstly {
             return self.pushRegistrationManager.requestPushTokens()
         }.then { (_: String, voipToken: String) -> Promise<String?> in
+            print("TESTSIG getPreauthChallenge(2)--");
             let (pushPromise, pushResolver) = Promise<String>.pending()
             self.pushRegistrationManager.preauthChallengeResolver = pushResolver
+            print("TESTSIG getPreauthChallenge(2)");
 
             return self.accountServiceClient.requestPreauthChallenge(recipientId: recipientId, pushToken: voipToken).then { () -> Promise<String?> in
                 let timeout: TimeInterval

@@ -38,7 +38,7 @@ public class ProvisioningCipher {
         return ProvisioningCipher(secondaryDeviceKeyPair: Curve25519.generateKeyPair())
     }
 
-    // MARK: 
+    // MARK:
 
     public func decrypt(envelope: ProvisioningProtoProvisionEnvelope) throws -> ProvisionMessage {
         let primaryDeviceEphemeralPublicKey = try ECPublicKey(serializedKeyData: envelope.publicKey)
@@ -121,6 +121,8 @@ public class ProvisioningCipher {
             }
             return uuid
         }()
+
+        print("TESTSIG ProvisioningCipher decrypt", uuid, phoneNumber, identityKeyPair, profileKey, areReadReceiptsEnabled, primaryUserAgent, provisioningCode, provisioningVersion)
 
         return ProvisionMessage(uuid: uuid,
                                 phoneNumber: phoneNumber,

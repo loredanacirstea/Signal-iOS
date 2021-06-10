@@ -30,6 +30,7 @@ public class ProvisioningController: NSObject {
     public init(onboardingController: OnboardingController) {
         self.onboardingController = onboardingController
         provisioningCipher = ProvisioningCipher.generate()
+        print("TESTSIG ProvisioningController init provisioningCipher", provisioningCipher)
 
         (self.deviceIdPromise, self.deviceIdResolver) = Promise.pending()
         (self.provisionEnvelopePromise, self.provisionEnvelopeResolver) = Promise.pending()
@@ -173,6 +174,7 @@ public class ProvisioningController: NSObject {
     public func getProvisioningURL() -> Promise<URL> {
         return getDeviceId().map { [weak self] deviceId in
             guard let self = self else { throw PMKError.cancelled }
+            print("TESTSIG getProvisioningURL deviceId", deviceId)
 
             return try self.buildProvisioningUrl(deviceId: deviceId)
         }
@@ -190,8 +192,10 @@ public class ProvisioningController: NSObject {
     }
 
     public func completeLinking(deviceName: String) -> Promise<Void> {
+        print("TESTSIG ProvisioningController init completeLinking deviceName", deviceName)
         return awaitProvisionMessage.then { [weak self] provisionMessage -> Promise<Void> in
             guard let self = self else { throw PMKError.cancelled }
+            print("TESTSIG ProvisioningController init completeSecondaryLinking provisionMessage", deviceName, provisionMessage)
 
             return self.accountManager.completeSecondaryLinking(provisionMessage: provisionMessage,
                                                                 deviceName: deviceName)
@@ -227,6 +231,7 @@ public class ProvisioningController: NSObject {
         // (If it's sufficient, my preference would be to do like we do elsewhere and
         // use the ping frames)
         provisioningSocket.connect()
+        print("TESTSIG getProvisioningURL deviceIdPromise", deviceIdPromise)
         return deviceIdPromise
     }
 }

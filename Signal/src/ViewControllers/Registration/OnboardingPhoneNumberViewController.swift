@@ -334,6 +334,7 @@ public class OnboardingPhoneNumberViewController: OnboardingBaseViewController {
                                       comment: "Message of alert indicating that users needs to enter a phone number to register."))
                 return
         }
+        print("TESTSIG parseAndTryToRegister phoneNumberText", phoneNumberText);
 
         let phoneNumber = "\(callingCode)\(phoneNumberText)"
         guard let localNumber = PhoneNumber.tryParsePhoneNumber(fromUserSpecifiedText: phoneNumber),
@@ -352,6 +353,7 @@ public class OnboardingPhoneNumberViewController: OnboardingBaseViewController {
                 return
         }
         let e164PhoneNumber = localNumber.toE164()
+        print("TESTSIG parseAndTryToRegister localNumber", localNumber, e164PhoneNumber);
 
         onboardingController.update(phoneNumber: OnboardingPhoneNumber(e164: e164PhoneNumber, userInput: phoneNumberText))
         onboardingController.requestVerification(fromViewController: self, isSMS: true)

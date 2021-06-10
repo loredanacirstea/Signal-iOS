@@ -78,12 +78,16 @@ extension ProvisioningSocket: SSKWebSocketDelegate {
 
     private func handleRequest(_ request: WebSocketProtoWebSocketRequestMessage) throws {
         Logger.debug("message: \(request.verb) \(request.path)")
+        print("TESTSIG ProvisioningSocket handleRequest request", request)
+        print("TESTSIG ProvisioningSocket handleRequest request", request.requestID)
         switch (request.verb, request.path) {
         case ("PUT", "/v1/address"):
             guard let body = request.body else {
                 throw OWSAssertionError("body was unexpectedly nil")
             }
             let uuidProto = try ProvisioningProtoProvisioningUuid(serializedData: body)
+            print("TESTSIG ProvisioningSocket handleRequest uuidProto", uuidProto)
+            print("TESTSIG ProvisioningSocket handleRequest uuidProto.uuid", uuidProto.uuid)
             delegate?.provisioningSocket(self, didReceiveDeviceId: uuidProto.uuid)
         case ("PUT", "/v1/message"):
             guard let body = request.body else {

@@ -7,9 +7,9 @@ import subprocess
 import sys
 import textwrap
 
-SIGNAL_BUNDLEID = "org.whispersystems.signal"
-SIGNAL_APPGROUP = "group.org.whispersystems.signal.group"
-SIGNAL_APPGROUP_STAGING = "group.org.whispersystems.signal.group.staging"
+SIGNAL_BUNDLEID = "org.lore.signal"
+SIGNAL_APPGROUP = "group.org.lore.signal.group"
+SIGNAL_APPGROUP_STAGING = "group.org.lore.signal.group.staging"
 
 SIGNAL_DEBUG_PAYLOAD_NAME = "dbPayload.txt"
 SIGNAL_DEBUG_PAYLOAD_DBPATH_KEY = "dbPath"
